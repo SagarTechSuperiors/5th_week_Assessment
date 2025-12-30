@@ -71,14 +71,29 @@ export default function Home({ products }) {
     </>
   );
 }
-
-// Fetch products with SSG
 export async function getStaticProps() {
-  const res = await fetch("https://fakestoreapi.com/products");
-  const products = await res.json();
+  try {
+    const res = await fetch("https://fakestoreapi.com/products");
 
-  return {
-    props: { products },
-    revalidate: 3600,
-  };
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.error("API ERROR:", errorText);
+      return {
+        props: { products: [] }, // fallback
+      };
+    }
+
+    const products = await res.json();
+
+    return {
+      props: { products },
+      revalidate: 3600,
+    };
+  } catch (err) {
+    console.error("Fetch failed:", err);
+
+    return {
+      props: { products: [] }, // fallback for Vercel
+    };
+  }
 }
