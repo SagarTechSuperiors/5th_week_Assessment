@@ -71,29 +71,20 @@ export default function Home({ products }) {
     </>
   );
 }
-export async function getStaticProps() {
+
+export async function getServerSideProps() {
   try {
     const res = await fetch("https://fakestoreapi.com/products");
 
-    if (!res.ok) {
-      const errorText = await res.text();
-      console.error("API ERROR:", errorText);
-      return {
-        props: { products: [] }, // fallback
-      };
+    let products = [];
+    if (res.ok && res.headers.get("content-type")?.includes("application/json")) {
+      products = await res.json();
     }
 
-    const products = await res.json();
-
-    return {
-      props: { products },
-      revalidate: 3600,
-    };
+    return { props: { products } };
   } catch (err) {
-    console.error("Fetch failed:", err);
-
-    return {
-      props: { products: [] }, // fallback for Vercel
-    };
+    console.error("Fetch error:", err);
+    return { props: { products: [] } };
   }
 }
+
