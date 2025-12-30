@@ -1,3 +1,4 @@
+"use client"
 import { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import ProductCard from "../components/ProductCard";
