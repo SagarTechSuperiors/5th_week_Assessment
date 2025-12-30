@@ -43,7 +43,7 @@ export default function Home({ products }) {
           </div>
           <div className="col-lg-6 mt-5 mt-lg-0 text-center">
              {/* Optimization: fetchPriority="high" for LCP */}
-             <Image
+             <img
                src="/shoppyLogo.png" 
                alt="Featured Product" 
                width={600} 
@@ -82,5 +82,6 @@ export async function getStaticProps() {
     revalidate: 3600,
   };
 }
+
 
 
